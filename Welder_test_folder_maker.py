@@ -4,6 +4,7 @@ import glob
 import datetime
 import sys
 from time import gmtime, strftime
+import openpyxl
 
 #----- FUNC BLOCK BEGIN
 
@@ -23,19 +24,25 @@ def logo():
 def line():
     print('\n  -------------------------------------------------------------------   \n')
 
-def create_folder_structure(type):
-    base_foler_name = strftime("%d%b%y", gmtime())
+def create_folder_structure(type,folder):
     
     resurces_folder_name = sys.path[0] + "/Resources"
     excel_req_file_name = resurces_folder_name + "/REQ.xls"
     excel_certgen_file_name = resurces_folder_name + "/cert_gen.xls"
     word_fracture_file_name = resurces_folder_name + "/Fracture.docx"
 
-    if not (os.path.isdir(base_foler_name)):
-        os.mkdir(base_foler_name)
+    #Genereate the folder name as exammple 13Jun19
+    time_string_gen = strftime("%d%b%y", gmtime())
+
+    #Open the path created by User. 
+    os.chdir(folder)
+
+    if not (os.path.isdir(time_string_gen)):
+        os.mkdir(time_string_gen)
     
     #Folder Name redirect's
-    inside_base_folder_name = sys.path[0] + "/" + base_foler_name
+    base_foler_name = folder + "/" + time_string_gen
+    inside_base_folder_name = base_foler_name
     inside_cers_folder_name = inside_base_folder_name + "/Certs"
     inside_reports_folder_name = inside_base_folder_name + "/Reports"
 
@@ -78,8 +85,10 @@ def create_folder_structure(type):
 # - 1 For Fracture  - 2 For Macro
 logo()
 
+#folder_name = input('Please enter folder path: ')
 print('Select test type: \n 1.Fracture \n 2.Macro \n')
 test_type = input('Enter choice: ')
 
-create_folder_structure(int(test_type))
+
+create_folder_structure(int(test_type),"C:/Users/M/Downloads/test")
 os.system("pause")
