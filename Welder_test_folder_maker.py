@@ -32,7 +32,17 @@ def excel_cert_data_editor(excel_file, folder, date, client_name, test_type):
 
     os.chdir(work_folder)
     wb = openpyxl.load_workbook(excel_file)
-    print(wb)
+
+    SheetTemplate = wb['Template']
+    SheetTemplate['F20'] = client_name
+    SheetTemplate['O47'] = strftime("%d/%m/%Y.", gmtime())
+    wb.save(excel_file)
+
+    SheetWelders = wb['Welders']  
+    SheetWelders['Q3'] = ''.join([c for c in client_name if c.isupper()])  #Generata from Upercase
+    SheetWelders['Q2'] = strftime("%m%y.", gmtime())
+    wb.save(excel_file)
+    
 
 def excel_req_data_editor(excel_file, folder, date, client_name, job_no, report_no, test_type):
     
