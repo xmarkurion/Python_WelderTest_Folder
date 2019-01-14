@@ -25,6 +25,15 @@ def make_space():
     os.system('cls')
     logo()
 
+
+#Przerobic all xls na xlsx i poprawic obrazki oraz sprawdzić gdzie zapisują się pewne dane.
+def excel_cert_data_editor(excel_file, folder, date, client_name, test_type):
+    work_folder = folder + "/" + date + "/Certs"
+
+    os.chdir(work_folder)
+    wb = openpyxl.load_workbook(excel_file)
+    print(wb)
+
 def excel_req_data_editor(excel_file, folder, date, client_name, job_no, report_no, test_type):
     
     time_string_gen = date
@@ -50,7 +59,7 @@ def create_folder_structure(type,folder,date):
     
     resurces_folder_name = sys.path[0] + "/Resources"
     excel_req_file_name = resurces_folder_name + "/REQ.xlsx"
-    excel_certgen_file_name = resurces_folder_name + "/cert_gen.xls"
+    excel_certgen_file_name = resurces_folder_name + "/cert_gen.xlsx"
     word_fracture_file_name = resurces_folder_name + "/Fracture.docx"
 
     #Genereate the folder name as exammple 13Jun19
@@ -92,8 +101,8 @@ def create_folder_structure(type,folder,date):
 
     #Here Script copy the Cert_gen.xls from resources file.
     os.chdir(inside_cers_folder_name)
-    if not(os.path.isfile("cert_gen.xls")):
-        shutil.copyfile(excel_certgen_file_name,"cert_gen.xls")
+    if not(os.path.isfile("cert_gen.xlsx")):
+        shutil.copyfile(excel_certgen_file_name,"cert_gen.xlsx")
 
     #Here Script copy Reports into reperts acording to choice.
     #os.chdir(inside_reports_folder_name)
@@ -135,6 +144,8 @@ if(int(folder_date) == 1):
     now_date = strftime("%d%b%y", gmtime())
     create_folder_structure(int(test_type),folder_name,now_date)
     excel_req_data_editor('REQ.xlsx',folder_name, now_date, client_name,'1234','23004',int(test_type))
+    excel_cert_data_editor('cert_gen.xlsx',folder_name,now_date,client_name,test_type)
+    
 
 if(int(folder_date) == 2):
     create_folder_structure(int(test_type),folder_name,folder_custom_date)
