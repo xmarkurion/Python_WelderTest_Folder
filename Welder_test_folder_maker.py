@@ -5,6 +5,7 @@ import datetime
 import sys
 from time import gmtime, strftime
 import openpyxl
+from datetime import datetime, timedelta
 
 #----- FUNC BLOCK BEGIN
 
@@ -39,8 +40,8 @@ def excel_cert_data_editor(excel_file, folder, date, client_name, test_type):
     wb.save(excel_file)
 
     SheetWelders = wb['Welders']  
-    SheetWelders['Q3'] = ''.join([c for c in client_name if c.isupper()])  #Generata from Upercase
-    SheetWelders['Q2'] = strftime("%m%y.", gmtime())
+    SheetWelders['S3'] = ''.join([c for c in client_name if c.isupper()])  #Generata from Upercase
+    SheetWelders['S2'] = strftime("%m%y.", gmtime())
     wb.save(excel_file)
     
 
@@ -59,7 +60,7 @@ def excel_req_data_editor(excel_file, folder, date, client_name, job_no, report_
     if(test_type == 2):
         sheet['D1'].value = "MACRO WELDING SURVEYOR'S REPORT"
 
-    sheet['D2'].value = client_name #making changes
+    sheet['D2'].value = client_name + " " + date #making changes
     sheet['J24'].value = job_no
     sheet['J26'].value = report_no
     wb.save(excel_file)
@@ -160,7 +161,7 @@ if(int(folder_date) == 1):
 if(int(folder_date) == 2):
     create_folder_structure(int(test_type),folder_name,folder_custom_date)
     excel_req_data_editor('REQ.xlsx',folder_name, folder_custom_date, client_name,'1234','23004',int(test_type))
-    
+    excel_cert_data_editor('cert_gen.xlsx',folder_name,folder_custom_date,client_name,test_type)
 
 print(" ---- ^^_^^ -----")
 
