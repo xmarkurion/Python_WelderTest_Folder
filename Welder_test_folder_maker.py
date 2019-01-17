@@ -187,25 +187,29 @@ entered_report_no = input('Entered Report Number: ')
 
 make_space()
 
-print('Creating folder structure in: ' + folder_name)
+print('Creating folder structure in: ' + folder_name + '\n ---- ^^_^^ -----')
 
 if(int(folder_date) == 1):
     now_date = strftime("%d%b%y", gmtime())
     create_folder_structure(int(test_type),folder_name,now_date)
+    print('Editing excel REQ data... \n ---- ^^_^^ -----')
     excel_req_data_editor('REQ.xlsx',folder_name, now_date, client_name,entered_job_no,entered_report_no,int(test_type))
+    print('Editing excel Certyficates data... \n ---- ^^_^^ -----')
     excel_cert_data_editor('cert_gen.xlsx',folder_name,now_date,client_name,test_type)
-    fracture_word_editor('Fracture.docx', folder_name, now_date, client_name, entered_job_no,entered_report_no)
+    print('Editing word report data... \n ---- ^^_^^ -----')
+    fracture_file_name = "Report " + entered_report_no + " Fracture " + client_name + " Job " + entered_job_no + ".docx"
+    fracture_word_editor(fracture_file_name, folder_name, now_date, client_name, entered_job_no,entered_report_no)
     
 
 if(int(folder_date) == 2):
     create_folder_structure(int(test_type),folder_name,folder_custom_date)
+    print('Editing excel REQ data... \n ---- ^^_^^ -----')
     excel_req_data_editor('REQ.xlsx',folder_name, folder_custom_date, client_name,entered_job_no,entered_report_no,int(test_type))
+    print('Editing excel Certyficates data... \n ---- ^^_^^ -----')
     excel_cert_data_editor('cert_gen.xlsx',folder_name,folder_custom_date,client_name,test_type)
-    macro_word_editor('Macro.docx', folder_name, folder_custom_date, client_name,entered_job_no,entered_report_no)
-
-print(" ---- ^^_^^ -----")
-
-print('Editing excel client data name & job & report')
+    print('Editing word report data... \n ---- ^^_^^ -----')
+    macro_file_name = "Report " + entered_report_no + " Macro " + client_name + " Job " + entered_job_no + ".docx"
+    macro_word_editor(macro_file_name, folder_name, folder_custom_date, client_name,entered_job_no,entered_report_no)
 
 
 print(" ---- ^^_^^ -----")
