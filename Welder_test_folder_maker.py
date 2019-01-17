@@ -1,11 +1,14 @@
+from __future__ import print_function
+from mailmerge import MailMerge
+from time import gmtime, strftime
+from datetime import datetime, timedelta
 import os
 import shutil
 import glob
 import datetime
 import sys
-from time import gmtime, strftime
 import openpyxl
-from datetime import datetime, timedelta
+
 
 #----- FUNC BLOCK BEGIN
 
@@ -26,8 +29,37 @@ def make_space():
     os.system('cls')
     logo()
 
+def fracture_word_editor(word_file, folder, date, client_name, job_no, report_no):
+    resurces_folder_name = sys.path[0] + "/Resources"
+    word_reports_folder = folder + "/" + date + "/Reports"
 
-#Przerobic all xls na xlsx i poprawic obrazki oraz sprawdzić gdzie zapisują się pewne dane.
+    os.chdir(resurces_folder_name)
+    doc = MailMerge('Fracture.docx')
+    doc.merge(
+        Job_no = job_no,
+        Report_no = report_no,
+        client = client_name,
+        date = date
+    )
+
+    os.chdir(word_reports_folder)
+    doc.write(word_file)   
+
+def macro_word_editor(word_file, folder, date, client_name, job_no, report_no):
+    resurces_folder_name = sys.path[0] + "/Resources"
+    word_reports_folder = folder + "/" + date + "/Reports"
+
+    os.chdir(resurces_folder_name)
+    doc = MailMerge('Macro.docx')
+    doc.merge(
+        Job_no = job_no,
+        Report_no = report_no,
+        client = client_name,
+        date = date
+    )
+    os.chdir(word_reports_folder)
+    doc.write(word_file)  
+
 def excel_cert_data_editor(excel_file, folder, date, client_name, test_type):
     work_folder = folder + "/" + date + "/Certs"
 
@@ -71,7 +103,7 @@ def create_folder_structure(type,folder,date):
     resurces_folder_name = sys.path[0] + "/Resources"
     excel_req_file_name = resurces_folder_name + "/REQ.xlsx"
     excel_certgen_file_name = resurces_folder_name + "/cert_gen.xlsx"
-    word_fracture_file_name = resurces_folder_name + "/Fracture.docx"
+    # word_fracture_file_name = resurces_folder_name + "/Fracture.docx"
 
     #Genereate the folder name as exammple 13Jun19
     time_string_gen = date
@@ -86,7 +118,6 @@ def create_folder_structure(type,folder,date):
     base_foler_name = folder + "/" + time_string_gen
     inside_base_folder_name = base_foler_name
     inside_cers_folder_name = inside_base_folder_name + "/Certs"
-    inside_reports_folder_name = inside_base_folder_name + "/Reports"
 
     os.chdir(inside_base_folder_name)
     if not(os.path.isdir("Certs")):
@@ -127,8 +158,9 @@ def create_folder_structure(type,folder,date):
 # - 1 For Fracture  - 2 For Macro
 logo()
 
-#folder_name = input('Please enter folder path: ')
-folder_name = "C:/Users/M/Downloads/test"
+folder_name = input('Please enter folder path: ')
+
+make_space()
 
 print('Select test type: \n 1.Fracture \n 2.Macro \n')
 test_type = input('Enter choice: ')
@@ -149,19 +181,27 @@ client_name = input('Enter client name: ')
 
 make_space()
 
+print('Please enter numbers: ')
+entered_job_no = input('Enter Job Number: ')
+entered_report_no = input('Entered Report Number: ')
+
+make_space()
+
 print('Creating folder structure in: ' + folder_name)
 
 if(int(folder_date) == 1):
     now_date = strftime("%d%b%y", gmtime())
     create_folder_structure(int(test_type),folder_name,now_date)
-    excel_req_data_editor('REQ.xlsx',folder_name, now_date, client_name,'1234','23004',int(test_type))
+    excel_req_data_editor('REQ.xlsx',folder_name, now_date, client_name,entered_job_no,entered_report_no,int(test_type))
     excel_cert_data_editor('cert_gen.xlsx',folder_name,now_date,client_name,test_type)
+    fracture_word_editor('Fracture.docx', folder_name, now_date, client_name, entered_job_no,entered_report_no)
     
 
 if(int(folder_date) == 2):
     create_folder_structure(int(test_type),folder_name,folder_custom_date)
-    excel_req_data_editor('REQ.xlsx',folder_name, folder_custom_date, client_name,'1234','23004',int(test_type))
+    excel_req_data_editor('REQ.xlsx',folder_name, folder_custom_date, client_name,entered_job_no,entered_report_no,int(test_type))
     excel_cert_data_editor('cert_gen.xlsx',folder_name,folder_custom_date,client_name,test_type)
+    macro_word_editor('Macro.docx', folder_name, folder_custom_date, client_name,entered_job_no,entered_report_no)
 
 print(" ---- ^^_^^ -----")
 
