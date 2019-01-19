@@ -33,13 +33,16 @@ def fracture_word_editor(word_file, folder, date, client_name, job_no, report_no
     resurces_folder_name = sys.path[0] + "/Resources"
     word_reports_folder = folder + "/" + date + "/Reports"
 
+    #Date in format XX XXXX XX
+    date_formated = date[0:2] + " " + date[2:-2] + " " + date[-2:]
+
     os.chdir(resurces_folder_name)
     doc = MailMerge('Fracture.docx')
     doc.merge(
         Job_no = job_no,
         Report_no = report_no,
         client = client_name,
-        date = date
+        date = date_formated.upper()
     )
 
     os.chdir(word_reports_folder)
@@ -48,6 +51,7 @@ def fracture_word_editor(word_file, folder, date, client_name, job_no, report_no
 def macro_word_editor(word_file, folder, date, client_name, job_no, report_no):
     resurces_folder_name = sys.path[0] + "/Resources"
     word_reports_folder = folder + "/" + date + "/Reports"
+    date_formated = date[0:2] + " " + date[2:-2] + " " + date[-2:]
 
     os.chdir(resurces_folder_name)
     doc = MailMerge('Macro.docx')
@@ -55,10 +59,18 @@ def macro_word_editor(word_file, folder, date, client_name, job_no, report_no):
         Job_no = job_no,
         Report_no = report_no,
         client = client_name,
-        date = date
+        date = date_formated.upper()
     )
     os.chdir(word_reports_folder)
     doc.write(word_file)  
+
+def excel_rename_req_file(excel_file,folder,date,client_name):
+    work_folder = folder + "/" + date
+    file_name = "REQ " + date.upper() + " " + client_name + ".xlsx"
+    os.chdir(work_folder)
+    wb = openpyxl.load_workbook(excel_file)
+    wb.save(file_name)
+    os.remove('REQ.xlsx')
 
 def excel_cert_data_editor(excel_file, folder, date, client_name, test_type):
     work_folder = folder + "/" + date + "/Certs"
@@ -82,6 +94,8 @@ def excel_req_data_editor(excel_file, folder, date, client_name, job_no, report_
     time_string_gen = date
     work_folder = folder + "/" + time_string_gen
 
+    date_formated = date[0:2] + " " + date[2:-2] + " " + date[-2:]
+
     os.chdir(work_folder)   #Select work Folder
     wb = openpyxl.load_workbook(excel_file)  #open excel file
     
@@ -92,7 +106,7 @@ def excel_req_data_editor(excel_file, folder, date, client_name, job_no, report_
     if(test_type == 2):
         sheet['D1'].value = "MACRO WELDING SURVEYOR'S REPORT"
 
-    sheet['D2'].value = client_name + " " + date #making changes
+    sheet['D2'].value = client_name + " " + date_formated.upper() #making changes
     sheet['J24'].value = job_no
     sheet['J26'].value = report_no
     wb.save(excel_file)
@@ -199,6 +213,8 @@ if(int(folder_date) == 1):
     print('Editing word report data... \n ---- ^^_^^ -----')
     fracture_file_name = "Report " + entered_report_no + " Fracture " + client_name + " Job " + entered_job_no + ".docx"
     fracture_word_editor(fracture_file_name, folder_name, now_date, client_name, entered_job_no,entered_report_no)
+    print('Rename REQ File... \n ---- ^^_^^ -----')
+    excel_rename_req_file("REQ.xlsx", folder_name, now_date, client_name)
     
 
 if(int(folder_date) == 2):
@@ -210,6 +226,8 @@ if(int(folder_date) == 2):
     print('Editing word report data... \n ---- ^^_^^ -----')
     macro_file_name = "Report " + entered_report_no + " Macro " + client_name + " Job " + entered_job_no + ".docx"
     macro_word_editor(macro_file_name, folder_name, folder_custom_date, client_name,entered_job_no,entered_report_no)
+    print('Rename REQ File... \n ---- ^^_^^ -----')
+    excel_rename_req_file("REQ.xlsx", folder_name, folder_custom_date, client_name)
 
 
 print(" ---- ^^_^^ -----")
