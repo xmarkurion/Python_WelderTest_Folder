@@ -85,7 +85,7 @@ def excel_cert_data_editor(excel_file, folder, date, client_name, test_type):
 
     SheetWelders = wb['Welders']  
     SheetWelders['S3'] = ''.join([c for c in client_name if c.isupper()])  #Generata from Upercase
-    SheetWelders['S2'] = strftime("%m%y.", gmtime())
+    SheetWelders['S2'] = strftime("%m%y", gmtime())
     wb.save(excel_file)
     
 
