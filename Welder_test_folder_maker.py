@@ -2,12 +2,14 @@ from __future__ import print_function
 from mailmerge import MailMerge
 from time import gmtime, strftime
 from datetime import datetime, timedelta
+from configparser import SafeConfigParser
 import os
 import shutil
 import glob
 import datetime
 import sys
 import openpyxl
+import configparser
 
 
 #----- FUNC BLOCK BEGIN
@@ -28,6 +30,29 @@ def logo():
 def make_space():
     os.system('cls')
     logo()
+
+
+def create_configuration_file(folder, date, client_name, job_no, report_no):
+    working_folder = folder + "/" + date
+    os.chdir(working_folder)
+    config_file_creator = open('test_data.ini', 'w+')
+    config_file_creator.close()
+
+    config = configparser.ConfigParser()
+
+    config.add_section('TEST')
+    with open('test_data.ini', 'w') as configfile:  #Save
+        config.write(configfile)
+
+    config.read('welder_test.ini')
+    config['TEST']['client'] = client_name
+    config['TEST']['date'] = date
+    config['TEST']['job_no'] = job_no
+    config['TEST']['report_no'] = report_no
+
+    with open('test_data.ini', 'w') as configfile:
+        config.write(configfile)
+
 
 def fracture_word_editor(word_file, folder, date, client_name, job_no, report_no):
     resurces_folder_name = sys.path[0] + "/Resources"
@@ -201,8 +226,16 @@ entered_report_no = input('Entered Report Number: ')
 
 make_space()
 
+print(' \n The data entered as folow: \n')
+print('Folder name: ' + folder_name + ' \n')
+print('Test type: ' + test_type + ' \n')
+print('Job Number: ' + entered_job_no + '\n')
+print('Report Number: ' + entered_report_no + ' \n')
+print('Will be saved .... \n \n')
+
 print('Creating folder structure in: ' + folder_name + '\n ---- ^^_^^ -----')
 
+#FRACTURE SECTION
 if(int(folder_date) == 1):
     now_date = strftime("%d%b%y", gmtime())
     create_folder_structure(int(test_type),folder_name,now_date)
@@ -215,8 +248,10 @@ if(int(folder_date) == 1):
     fracture_word_editor(fracture_file_name, folder_name, now_date, client_name, entered_job_no,entered_report_no)
     print('Rename REQ File... \n ---- ^^_^^ -----')
     excel_rename_req_file("REQ.xlsx", folder_name, now_date, client_name)
+    print('Create and modyfi configuration File... \n ---- ^^_^^ -----')
+    create_configuration_file(folder_name, now_date, client_name, entered_job_no, entered_report_no)
     
-
+#MACRO SECTION
 if(int(folder_date) == 2):
     create_folder_structure(int(test_type),folder_name,folder_custom_date)
     print('Editing excel REQ data... \n ---- ^^_^^ -----')
@@ -228,7 +263,9 @@ if(int(folder_date) == 2):
     macro_word_editor(macro_file_name, folder_name, folder_custom_date, client_name,entered_job_no,entered_report_no)
     print('Rename REQ File... \n ---- ^^_^^ -----')
     excel_rename_req_file("REQ.xlsx", folder_name, folder_custom_date, client_name)
+    print('Create and modyfi configuration File... \n ---- ^^_^^ -----')
+    create_configuration_file(folder_name, folder_custom_date, client_name, entered_job_no, entered_report_no)
 
 
-print(" ---- ^^_^^ -----")
+print(" \n \n ---- DONE -----")
 os.system("pause")
