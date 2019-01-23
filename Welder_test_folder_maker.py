@@ -132,8 +132,8 @@ def excel_req_data_editor(excel_file, folder, date, client_name, job_no, report_
         sheet['D1'].value = "MACRO WELDING SURVEYOR'S REPORT"
 
     sheet['D2'].value = client_name + " " + date_formated.upper() #making changes
-    sheet['J24'].value = job_no
-    sheet['J26'].value = report_no
+    sheet['J1'].value = job_no
+    sheet['M1'].value = report_no
     wb.save(excel_file)
     
 
