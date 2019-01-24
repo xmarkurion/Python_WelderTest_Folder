@@ -32,7 +32,7 @@ def make_space():
     logo()
 
 
-def create_configuration_file(folder, date, client_name, job_no, report_no):
+def create_configuration_file(folder, date, client_name, job_no, report_no, test_type):
     working_folder = folder + "/" + date
     os.chdir(working_folder)
     config_file_creator = open('test_data.ini', 'w+')
@@ -49,6 +49,7 @@ def create_configuration_file(folder, date, client_name, job_no, report_no):
     config['TEST']['date'] = date
     config['TEST']['job_no'] = job_no
     config['TEST']['report_no'] = report_no
+    config['TEST']['test_type'] = test_type
 
     with open('test_data.ini', 'w') as configfile:
         config.write(configfile)
@@ -106,6 +107,13 @@ def excel_cert_data_editor(excel_file, folder, date, client_name, test_type):
     SheetTemplate = wb['Template']
     SheetTemplate['F20'] = client_name
     SheetTemplate['O47'] = strftime("%d/%m/%Y.", gmtime())
+
+    if test_type == '2':
+        SheetTemplate['F48'] = "-"
+        SheetTemplate['I48'] = "N/A"
+        SheetTemplate['F47'] = "Yes"
+        SheetTemplate['I47'] = "-"
+
     wb.save(excel_file)
 
     SheetWelders = wb['Welders']  
@@ -249,7 +257,7 @@ if(int(folder_date) == 1):
     print('Rename REQ File... \n ---- ^^_^^ -----')
     excel_rename_req_file("REQ.xlsx", folder_name, now_date, client_name)
     print('Create and modyfi configuration File... \n ---- ^^_^^ -----')
-    create_configuration_file(folder_name, now_date, client_name, entered_job_no, entered_report_no)
+    create_configuration_file(folder_name, now_date, client_name, entered_job_no, entered_report_no,test_type)
     
 #MACRO SECTION
 if(int(folder_date) == 2):
@@ -264,7 +272,7 @@ if(int(folder_date) == 2):
     print('Rename REQ File... \n ---- ^^_^^ -----')
     excel_rename_req_file("REQ.xlsx", folder_name, folder_custom_date, client_name)
     print('Create and modyfi configuration File... \n ---- ^^_^^ -----')
-    create_configuration_file(folder_name, folder_custom_date, client_name, entered_job_no, entered_report_no)
+    create_configuration_file(folder_name, folder_custom_date, client_name, entered_job_no, entered_report_no,test_type)
 
 
 print(" \n \n ---- DONE -----")

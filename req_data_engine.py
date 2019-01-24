@@ -64,6 +64,7 @@ welders_process = []
 welders_material = []
 welders_thickness = []
 welders_fwbw = []
+welders_pipe_plate = []
 
 while True:
     cell_C = "C" + str(loop) #Welders credentials
@@ -76,6 +77,7 @@ while True:
     cell_K = "K" + str(loop) #Welders SL/ML
     cell_L = "L" + str(loop) #Welders FW/BW L
     cell_A = "A" + str(loop) #Welders ID-no
+    cell_M = "M" + str(loop) #Welders Pipe / Pleate
     
 
     if sheet[cell_C].value == 'END':
@@ -91,6 +93,7 @@ while True:
     welders_thickness.append(sheet[cell_I].value)
     welders_fwbw.append(sheet[cell_L].value)
     welders_id.append(sheet[cell_A].value)
+    welders_pipe_plate.append(sheet[cell_M].value)
     
     loop += 1
 
@@ -133,6 +136,7 @@ while True:
     cell_N = "N" + str(loop) #Welder mm size
     cell_V = "V" + str(loop) #Welders Welding Type
     cell_W = "W" + str(loop) #Welders Welding Material Type
+    cell_X = "X" + str(loop) #Welders pipe / plate
 
     if loop == amout_of_records + 1:
         break
@@ -161,6 +165,7 @@ while True:
     sheet[cell_N].value = welders_thickness[cert_loop]
     sheet[cell_V].value = welders_process[cert_loop]
     sheet[cell_W].value = welders_material[cert_loop]
+    sheet[cell_X].value = welders_pipe_plate[cert_loop]
     
 
     cert_loop += 1
