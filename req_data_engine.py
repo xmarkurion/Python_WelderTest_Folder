@@ -33,7 +33,14 @@ def make_space():
 
 
 #req_folder_location = input('Location of the REQ File: ')
-folder_location = r'E:\temp\22Jan19'
+make_space()
+
+print('Please enter folder location where test_data.ini is: ')
+folder_location = input('Enter it here: ')
+
+
+
+#folder_location = r'E:\temp\22Jan19'
 os.chdir(folder_location)
 
 #Read config file
@@ -217,8 +224,52 @@ print(welders_master_table)
 
 doc.merge_rows('wqt_no',welders_master_table)
 
+empty_picture_table = []
+
+loop = 0
+while True:
+    if loop == len(welders_list):
+        break
+
+    
+    #If Macro is 
+    if int(test_type) == 2:
+        insert_text_macro = str(welders_id[loop]) + ". " + str(welders_list[loop]) + "\n Acceptable to Specification."
+        empty_picture_table.append(
+        {
+            'picture_table_1': insert_text_macro,
+            'picture_table_2': insert_text_macro
+        })
+    
+    #If Fracture is
+    if int(test_type) == 1:
+        insert_text_fracture_1 = str(welders_id[loop]) + ". " + str(welders_list[loop]) + "\n Acceptable to Specification."
+        
+        if (loop < len(welders_list)+1) :
+            if (len(welders_list)-1 == loop):
+                break
+            insert_text_fracture_2 = str(welders_id[loop+1]) + ". " + str(welders_list[loop+1]) + "\n Acceptable to Specification."
+
+            empty_picture_table.append(
+            {
+            'picture_table_1': insert_text_fracture_1,
+            'picture_table_2': insert_text_fracture_2
+            })
+
+            empty_picture_table.append(
+            {
+                'picture_table_1': '\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n',
+                'picture_table_2': '\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n'
+            })
+
+            loop += 1
+
+    loop += 1
+
+doc.merge_rows('picture_table_1', empty_picture_table)
+
 os.chdir(word_reports_folder)
 doc.write(main_report_file_name) 
     
 
-os.system("pause")
+os.system("pause") 
