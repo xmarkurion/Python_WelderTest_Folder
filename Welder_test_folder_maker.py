@@ -32,7 +32,8 @@ def make_space():
     logo()
 
 
-def create_configuration_file(folder, date, client_name, job_no, report_no, test_type):
+def create_configuration_file(folder, date, client_name, job_no, report_no, test_type, report_file_name):
+    date_formated = date[0:2] + " " + date[2:-2] + " " + date[-2:]
     working_folder = folder + "/" + date
     os.chdir(working_folder)
     config_file_creator = open('test_data.ini', 'w+')
@@ -47,9 +48,11 @@ def create_configuration_file(folder, date, client_name, job_no, report_no, test
     config.read('welder_test.ini')
     config['TEST']['client'] = client_name
     config['TEST']['date'] = date
+    config['TEST']['date_formated'] = date_formated.upper()
     config['TEST']['job_no'] = job_no
     config['TEST']['report_no'] = report_no
     config['TEST']['test_type'] = test_type
+    config['TEST']['report_name'] = report_file_name
 
     with open('test_data.ini', 'w') as configfile:
         config.write(configfile)
@@ -257,7 +260,7 @@ if(int(folder_date) == 1):
     print('Rename REQ File... \n ---- ^^_^^ -----')
     excel_rename_req_file("REQ.xlsx", folder_name, now_date, client_name)
     print('Create and modyfi configuration File... \n ---- ^^_^^ -----')
-    create_configuration_file(folder_name, now_date, client_name, entered_job_no, entered_report_no,test_type)
+    create_configuration_file(folder_name, now_date, client_name, entered_job_no, entered_report_no,test_type,fracture_file_name)
     
 #MACRO SECTION
 if(int(folder_date) == 2):
@@ -272,7 +275,7 @@ if(int(folder_date) == 2):
     print('Rename REQ File... \n ---- ^^_^^ -----')
     excel_rename_req_file("REQ.xlsx", folder_name, folder_custom_date, client_name)
     print('Create and modyfi configuration File... \n ---- ^^_^^ -----')
-    create_configuration_file(folder_name, folder_custom_date, client_name, entered_job_no, entered_report_no,test_type)
+    create_configuration_file(folder_name, folder_custom_date, client_name, entered_job_no, entered_report_no,test_type, macro_file_name)
 
 
 print(" \n \n ---- DONE -----")

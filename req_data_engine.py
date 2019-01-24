@@ -33,8 +33,8 @@ def make_space():
 
 
 #req_folder_location = input('Location of the REQ File: ')
-req_folder_location = r'E:\temp\22Jan19'
-os.chdir(req_folder_location)
+folder_location = r'E:\temp\22Jan19'
+os.chdir(folder_location)
 
 #Read config file
 config = configparser.ConfigParser()
@@ -43,7 +43,10 @@ config.read('test_data.ini')
 client_name = config['TEST']['client']
 date = config['TEST']['date']
 job_no = config['TEST']['job_no']
+test_type = config['TEST']['test_type']
 report_no = config['TEST']['report_no']
+date_formated = config['TEST']['date_formated']
+main_report_file_name = config['TEST']['report_name']
 
 xls_file_name = "REQ " + date.upper() + " " + client_name + ".xlsx"
 print(xls_file_name)
@@ -114,7 +117,7 @@ print(' \n --------- ------- ----- ------ ------ -----')
 #Paste data module 
 amout_of_records = loop - 4
 
-certs_folder = req_folder_location + "/" + "Certs"
+certs_folder = folder_location + "/" + "Certs"
 os.chdir(certs_folder)
 
 wb = openpyxl.load_workbook('cert_gen.xlsx')
@@ -172,4 +175,50 @@ while True:
     loop += 1
 
 wb.save('cert_gen.xlsx')
+
+resurces_folder_name = sys.path[0] + "/Resources"
+word_reports_folder = folder_location + "/" + "/Reports"
+
+os.chdir(resurces_folder_name)
+
+if int(test_type) == 1:
+    doc = MailMerge('Fracture.docx')
+
+if int(test_type) == 2:
+    doc = MailMerge('Macro.docx')
+
+doc.merge(
+    Job_no = job_no,
+    Report_no = report_no,
+    client = client_name,
+    date = date_formated
+)
+
+welders_master_table = []
+
+loop = 0
+while True:
+    if loop == len(welders_list):
+        break
+
+    welders_master_table.append(
+    {
+        'wqt_no': str(welders_id[loop]),
+        'welder_name': str(welders_list[loop]),
+        'sl_ml': str(welders_slml[loop]),
+        'postion': str(welders_pbpf[loop]),
+        'size': str(welders_thickness[loop]),
+        'comment': 'No defects noted',
+        'result': 'Accepted'
+    })
+    loop += 1
+
+print(welders_master_table)
+
+doc.merge_rows('wqt_no',welders_master_table)
+
+os.chdir(word_reports_folder)
+doc.write(main_report_file_name) 
+    
+
 os.system("pause")
