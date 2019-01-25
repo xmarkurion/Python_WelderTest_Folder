@@ -34,11 +34,11 @@ def make_space():
 
 #req_folder_location = input('Location of the REQ File: ')
 make_space()
-
 print('Please enter folder location where test_data.ini is: ')
 folder_location = input('Enter it here: ')
 
-
+os.system('cls')
+make_space()
 
 #folder_location = r'E:\temp\22Jan19'
 os.chdir(folder_location)
@@ -56,7 +56,9 @@ date_formated = config['TEST']['date_formated']
 main_report_file_name = config['TEST']['report_name']
 
 xls_file_name = "REQ " + date.upper() + " " + client_name + ".xlsx"
-print(xls_file_name)
+
+print('Using file name: ' + xls_file_name)
+print(' \n --------- ------- ----- ------ ------ -----')
 
 wb = openpyxl.load_workbook(xls_file_name)
 sheet = wb['Sheet1']
@@ -107,7 +109,6 @@ while True:
     
     loop += 1
 
-logo()
 
 print('Data source read: \n')
 print(welders_list)
@@ -120,7 +121,7 @@ print(welders_thickness)
 print(welders_fwbw)
 print(' \n --------- ------- ----- ------ ------ -----')
 
-
+print('Collecting & Writing data from excel REQ to Certs...... \n')
 #Paste data module 
 amout_of_records = loop - 4
 
@@ -183,6 +184,9 @@ while True:
 
 wb.save('cert_gen.xlsx')
 
+print(' \n --------- ------- ----- ------ ------ -----')
+print('Writing data into word report.... \n')
+
 resurces_folder_name = sys.path[0] + "/Resources"
 word_reports_folder = folder_location + "/" + "/Reports"
 
@@ -220,8 +224,6 @@ while True:
     })
     loop += 1
 
-print(welders_master_table)
-
 doc.merge_rows('wqt_no',welders_master_table)
 
 empty_picture_table = []
@@ -234,11 +236,18 @@ while True:
     
     #If Macro is 
     if int(test_type) == 2:
-        insert_text_macro = str(welders_id[loop]) + ". " + str(welders_list[loop]) + "\n Acceptable to Specification."
+        insert_text_macro_1 = str(welders_id[loop]) + ". " + str(welders_list[loop]) + "\n Acceptable to Specification."
+        insert_text_macro_2 = str(welders_id[loop]) + ". " + str(welders_list[loop]) + "  Start/Stop" + "\n Acceptable to Specification."
         empty_picture_table.append(
         {
-            'picture_table_1': insert_text_macro,
-            'picture_table_2': insert_text_macro
+            'picture_table_1': insert_text_macro_1,
+            'picture_table_2': insert_text_macro_2
+        })
+
+        empty_picture_table.append(
+        {
+            'picture_table_1': '\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n',
+            'picture_table_2': '\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n'
         })
     
     #If Fracture is
@@ -271,5 +280,7 @@ doc.merge_rows('picture_table_1', empty_picture_table)
 os.chdir(word_reports_folder)
 doc.write(main_report_file_name) 
     
-
+print(' \n --------- ------- ----- ------ ------ -----')
+print('DONE')
+print(' \n --------- ------- ----- ------ ------ -----')
 os.system("pause") 
