@@ -48,6 +48,7 @@ config = configparser.ConfigParser()
 config.read('test_data.ini')
 
 client_name = config['TEST']['client']
+client_adr = config['TEST']['client_adr']
 date = config['TEST']['date']
 job_no = config['TEST']['job_no']
 test_type = config['TEST']['test_type']
@@ -202,7 +203,8 @@ doc.merge(
     Job_no = job_no,
     Report_no = report_no,
     client = client_name,
-    date = date_formated
+    date = date_formated,
+    word_client_adr = client_adr
 )
 
 welders_master_table = []

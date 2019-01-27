@@ -53,6 +53,7 @@ def create_configuration_file(folder, date, client_name, job_no, report_no, test
     config['TEST']['report_no'] = report_no
     config['TEST']['test_type'] = test_type
     config['TEST']['report_name'] = report_file_name
+    config['TEST']['client_adr'] = ''
 
     with open('test_data.ini', 'w') as configfile:
         config.write(configfile)
