@@ -79,6 +79,7 @@ welders_thickness = []
 welders_fwbw = []
 welders_pipe_plate = []
 
+#Data Load to Cashe
 while True:
     cell_C = "C" + str(loop) #Welders credentials
     cell_E = "E" + str(loop) #Welders dob
@@ -120,6 +121,7 @@ print(welders_process)
 print(welders_material)
 print(welders_thickness)
 print(welders_fwbw)
+print(welders_list[0])
 print(' \n --------- ------- ----- ------ ------ -----')
 
 print('Collecting & Writing data from excel REQ to Certs...... \n')
@@ -135,8 +137,13 @@ sheet = wb['Welders']
 #print( sheet['F2'].value )
 
 loop = 2
-cert_loop = 1
+cert_loop = 0
 while True:
+
+    #if loop == amout_of_records + 1:
+    if cert_loop == amout_of_records:
+        break
+
     cell_A = "A" + str(loop) #Welder ID
     cell_F = "F" + str(loop) #Welder Name
     cell_G = "G" + str(loop) #Welder DOB
@@ -150,8 +157,6 @@ while True:
     cell_W = "W" + str(loop) #Welders Welding Material Type
     cell_X = "X" + str(loop) #Welders pipe / plate
 
-    if loop == amout_of_records + 1:
-        break
 
     sheet[cell_A].value = welders_id[cert_loop]
     sheet[cell_F].value = welders_list[cert_loop]
@@ -178,10 +183,10 @@ while True:
     sheet[cell_V].value = welders_process[cert_loop]
     sheet[cell_W].value = welders_material[cert_loop]
     sheet[cell_X].value = welders_pipe_plate[cert_loop]
-    
 
     cert_loop += 1
     loop += 1
+
 
 wb.save('cert_gen.xlsx')
 
@@ -230,6 +235,7 @@ doc.merge_rows('wqt_no',welders_master_table)
 
 empty_picture_table = []
 
+
 loop = 0
 while True:
     if loop == len(welders_list):
@@ -274,6 +280,7 @@ while True:
             })
 
             loop += 1
+
 
     loop += 1
 
